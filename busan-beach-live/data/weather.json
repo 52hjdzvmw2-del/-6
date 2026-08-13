@@ -1,0 +1,13 @@
+{
+  "generatedAt": null,
+  "beaches": {
+    "haeundae": { "name": "해운대해수욕장", "grid": { "nx": 99, "ny": 75 }, "status": "unavailable", "current": null, "forecast": [] },
+    "gwangalli": { "name": "광안리해수욕장", "grid": { "nx": 99, "ny": 75 }, "status": "unavailable", "current": null, "forecast": [] },
+    "songjeong": { "name": "송정해수욕장", "grid": { "nx": 100, "ny": 76 }, "status": "unavailable", "current": null, "forecast": [] },
+    "songdo": { "name": "송도해수욕장", "grid": { "nx": 97, "ny": 73 }, "status": "unavailable", "current": null, "forecast": [] },
+    "dadaepo": { "name": "다대포해수욕장", "grid": { "nx": 96, "ny": 73 }, "status": "unavailable", "current": null, "forecast": [] },
+    "ilgwang": { "name": "일광해수욕장", "grid": { "nx": 101, "ny": 78 }, "status": "unavailable", "current": null, "forecast": [] },
+    "imrang": { "name": "임랑해수욕장", "grid": { "nx": 101, "ny": 79 }, "status": "unavailable", "current": null, "forecast": [] }
+  },
+  "source": { "name": "기상청 단기예보 조회서비스" }
+}
