@@ -22,6 +22,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
+      - name: Check KMA API DNS
+        run: getent hosts apis.data.go.kr || true
+      - name: Check KMA API HTTPS connectivity
+        run: curl -I --connect-timeout 20 --max-time 30 https://apis.data.go.kr/ || true
+      - name: Check KMA API IPv4 connectivity
+        run: curl -4 -I --connect-timeout 20 --max-time 30 https://apis.data.go.kr/ || true
       - name: Fetch official KMA weather data
         run: node scripts/fetch-weather.js
         env:
