@@ -15,7 +15,7 @@ function renderParking(p){
     txt('#parking-name','주변 공영주차장');txt('#parking-value','—');txt('#parking-message',p?.error||'실시간 주차 정보 미제공');txt('#parking-badge','정보 미제공');txt('#parking-rate','—');txt('#parking-time','갱신 시각 미제공');$('#parking-bar').style.width='0%';return;
   }
   const ratio=lot.total>0&&lot.available<=lot.total?Math.round(lot.available/lot.total*100):null;
-  txt('#parking-name',lot.name);txt('#parking-value',`${lot.available} / ${lot.total}`);txt('#parking-message','현재 주차 수 / 전체 주차면');txt('#parking-badge',parkingLabel(lot));txt('#parking-rate',ratio===null?'혼잡도 확인 불가':`${ratio}% 가능`);txt('#parking-time',lot.updatedAt||'갱신 시각 미제공');$('#parking-bar').style.width=ratio===null?'0%':ratio+'%';
+  txt('#parking-name',lot.name);txt('#parking-value',`${lot.available} / ${lot.total}`);txt('#parking-message','주차 가능 대수 / 전체 주차면');txt('#parking-badge',parkingLabel(lot));txt('#parking-rate',ratio===null?'혼잡도 확인 불가':`${ratio}% 가능`);txt('#parking-time',lot.updatedAt||'갱신 시각 미제공');$('#parking-bar').style.width=ratio===null?'0%':ratio+'%';
 }function renderWeather(w,water){last.weather=w;txt('#water',water?.message||'\uc218\uc628 \uc815\ubcf4 \ubbf8\uc81c\uacf5');if(w?.status!=='ok'){txt('#weather-message',w?.message||'\ub0a0\uc528 API \uc124\uc815 \ud544\uc694');txt('#temperature','—');txt('#weather-icon','—');txt('#rain','—');txt('#weather-time','\uad00\uce21 \uc2dc\uac01 \ubbf8\uc81c\uacf5');renderHours([]);return}txt('#weather-message','');txt('#temperature',`${w.temperature}°C`);txt('#weather-icon',weatherIcon(w.condition));txt('#rain',typeof w.rainProbability==='number'?`${w.rainProbability}%`:'\uc815\ubcf4 \ubbf8\uc81c\uacf5');txt('#weather-time',w.observedAt||'\uad00\uce21 \uc2dc\uac01 \ubbf8\uc81c\uacf5');renderHours(w.hourly||[])}function renderHours(list){const h=$('#hours');h.innerHTML='';if(!list.length){txt('#forecast-message','\uc2dc\uac04\ub300\ubcc4 \ub0a0\uc528 \uc815\ubcf4 \ubbf8\uc81c\uacf5');return}txt('#forecast-message','');list.forEach(x=>{let n=document.createElement('article');n.className='hour';n.innerHTML=`<time>${x.time}</time><div class="icon-weather">${weatherIcon(x.condition)}</div><b>${x.temperature}°</b><small>${typeof x.rainProbability==='number'?x.rainProbability+'%':'—'}</small>`;h.append(n)})}function render(d){last=d;renderVisitor(d.visitors);renderParking(d.parking);renderWeather(d.weather,d.water)}async function loadParking(){
   try{
     const response=await fetch(`./data/parking.json?ts=${Date.now()}`,{cache:'no-store'});
@@ -79,4 +79,70 @@ window.addEventListener('hashchange', () => {
   syncCrossSiteNavigation();
 });
 syncCrossSiteNavigation();
+
+// UI wording only: this feed's displayed count is the current parked-vehicle count, not free spaces.
+function occupancyLabel(lot) {
+  if (!lot || !Number.isFinite(lot.total) || lot.total <= 0 || !Number.isFinite(lot.available) || lot.available > lot.total) return '상태 확인 필요';
+  const ratio = lot.available / lot.total;
+  return ratio >= 1 ? '만차' : ratio >= .95 ? '만차 임박' : ratio >= .8 ? '혼잡' : ratio >= .5 ? '보통' : '여유';
+}
+renderParking = function renderCurrentParkingCount(parking) {
+  last.parking = parking;
+  const lot = parking?.status === 'ok' ? parking.primary : null;
+  if (!lot) {
+    txt('#parking-name', '주변 공영주차장');
+    txt('#parking-value', '—');
+    txt('#parking-message', parking?.error || '실시간 주차 정보 미제공');
+    txt('#parking-badge', '정보 미제공');
+    txt('#parking-rate', '—');
+    txt('#parking-time', '갱신 시각 미제공');
+    $('#parking-bar').style.width = '0%';
+    return;
+  }
+  const ratio = lot.total > 0 && lot.available <= lot.total ? Math.round(lot.available / lot.total * 100) : null;
+  txt('#parking-name', lot.name);
+  txt('#parking-value', `${lot.available} / ${lot.total}`);
+  txt('#parking-message', '현재 주차 대수 / 전체 주차면');
+  txt('#parking-badge', occupancyLabel(lot));
+  txt('#parking-rate', ratio === null ? '상태 확인 필요' : `${ratio}% 주차`);
+  txt('#parking-time', lot.updatedAt || '갱신 시각 미제공');
+  $('#parking-bar').style.width = ratio === null ? '0%' : `${ratio}%`;
+};
+$('#parking-button').onclick = () => {
+  const parking = last.parking;
+  const lots = $('#lots');
+  lots.innerHTML = parking?.status === 'ok' && parking.items?.length
+    ? parking.items.map((lot) => `<div class="lot"><b>${lot.name}</b><small>현재 주차 대수 ${lot.available}대 / 전체 ${lot.total}면 · ${lot.updatedAt || '갱신 시각 미제공'}</small></div>`).join('')
+    : '<p class="empty">실시간 주차 정보 미제공</p>';
+  openParkingSheet();
+};
+// Encoding-safe final parking wording override.
+function occupancyLabelFinal(lot) {
+  if (!lot || !Number.isFinite(lot.total) || lot.total <= 0 || !Number.isFinite(lot.available) || lot.available > lot.total) return '\uC0C1\uD0DC \uD655\uC778 \uD544\uC694';
+  const ratio = lot.available / lot.total;
+  return ratio >= 1 ? '\uB9CC\uCC28' : ratio >= .95 ? '\uB9CC\uCC28 \uC784\uBC15' : ratio >= .8 ? '\uD63C\uC7A1' : ratio >= .5 ? '\uBCF4\uD1B5' : '\uC5EC\uC720';
+}
+renderParking = function renderCurrentParkingCountFinal(parking) {
+  last.parking = parking;
+  const lot = parking?.status === 'ok' ? parking.primary : null;
+  if (!lot) {
+    txt('#parking-name', '\uC8FC\uBCC0 \uACF5\uC601\uC8FC\uCC28\uC7A5'); txt('#parking-value', '\u2014');
+    txt('#parking-message', parking?.error || '\uC2E4\uC2DC\uAC04 \uC8FC\uCC28 \uC815\uBCF4 \uBBF8\uC81C\uACF5'); txt('#parking-badge', '\uC815\uBCF4 \uBBF8\uC81C\uACF5');
+    txt('#parking-rate', '\u2014'); txt('#parking-time', '\uAC31\uC2E0 \uC2DC\uAC01 \uBBF8\uC81C\uACF5'); $('#parking-bar').style.width = '0%';
+    return;
+  }
+  const ratio = lot.total > 0 && lot.available <= lot.total ? Math.round(lot.available / lot.total * 100) : null;
+  txt('#parking-name', lot.name); txt('#parking-value', `${lot.available} / ${lot.total}`);
+  txt('#parking-message', '\uD604\uC7AC \uC8FC\uCC28 \uB300\uC218 / \uC804\uCCB4 \uC8FC\uCC28\uBA74');
+  txt('#parking-badge', occupancyLabelFinal(lot));
+  txt('#parking-rate', ratio === null ? '\uC0C1\uD0DC \uD655\uC778 \uD544\uC694' : `${ratio}% \uC8FC\uCC28`);
+  txt('#parking-time', lot.updatedAt || '\uAC31\uC2E0 \uC2DC\uAC01 \uBBF8\uC81C\uACF5'); $('#parking-bar').style.width = ratio === null ? '0%' : `${ratio}%`;
+};
+$('#parking-button').onclick = () => {
+  const parking = last.parking, lots = $('#lots');
+  lots.innerHTML = parking?.status === 'ok' && parking.items?.length
+    ? parking.items.map((lot) => `<div class="lot"><b>${lot.name}</b><small>\uD604\uC7AC \uC8FC\uCC28 \uB300\uC218 ${lot.available}\uB300 / \uC804\uCCB4 ${lot.total}\uBA74 \u00B7 ${lot.updatedAt || '\uAC31\uC2E0 \uC2DC\uAC01 \uBBF8\uC81C\uACF5'}</small></div>`).join('')
+    : '<p class="empty">\uC2E4\uC2DC\uAC04 \uC8FC\uCC28 \uC815\uBCF4 \uBBF8\uC81C\uACF5</p>';
+  openParkingSheet();
+};
 </script></body></html>
