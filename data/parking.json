@@ -1,13 +1,145 @@
 {
-  "generatedAt": null,
+  "generatedAt": "2026-08-13T12:11:40+09:00",
   "beaches": {
-    "haeundae": { "name": "해운대해수욕장", "status": "unavailable", "primary": null, "parkingLots": [] },
-    "gwangalli": { "name": "광안리해수욕장", "status": "unavailable", "primary": null, "parkingLots": [] },
-    "songjeong": { "name": "송정해수욕장", "status": "unavailable", "primary": null, "parkingLots": [] },
-    "songdo": { "name": "송도해수욕장", "status": "unavailable", "primary": null, "parkingLots": [] },
-    "dadaepo": { "name": "다대포해수욕장", "status": "unavailable", "primary": null, "parkingLots": [] },
-    "ilgwang": { "name": "일광해수욕장", "status": "unavailable", "primary": null, "parkingLots": [] },
-    "imrang": { "name": "임랑해수욕장", "status": "unavailable", "primary": null, "parkingLots": [] }
+    "haeundae": {
+      "name": "해운대해수욕장",
+      "status": "ok",
+      "primary": {
+        "code": "A36",
+        "name": "해운대광장",
+        "total": 164,
+        "occupied": 0,
+        "available": 164,
+        "updatedAt": "2026-08-13 12:10:00",
+        "status": "ok"
+      },
+      "parkingLots": [
+        {
+          "code": "A36",
+          "name": "해운대광장",
+          "total": 164,
+          "occupied": 0,
+          "available": 164,
+          "updatedAt": "2026-08-13 12:10:00",
+          "status": "ok"
+        },
+        {
+          "code": "A25",
+          "name": "미포공영",
+          "total": 97,
+          "occupied": 29,
+          "available": 68,
+          "updatedAt": "2026-08-13 12:10:00",
+          "status": "ok"
+        },
+        {
+          "code": "A17",
+          "name": "동백사거리",
+          "total": 36,
+          "occupied": 25,
+          "available": 11,
+          "updatedAt": "2026-08-13 12:10:00",
+          "status": "ok"
+        },
+        {
+          "code": "A18",
+          "name": "중동이마트 옆",
+          "total": 78,
+          "occupied": 1,
+          "available": 77,
+          "updatedAt": "2026-08-13 12:10:00",
+          "status": "ok"
+        },
+        {
+          "code": "A24",
+          "name": "중동역",
+          "total": 167,
+          "occupied": 79,
+          "available": 88,
+          "updatedAt": "2026-08-13 12:10:00",
+          "status": "ok"
+        },
+        {
+          "code": "A41",
+          "name": "요트경기장 앞 1구역",
+          "total": 231,
+          "occupied": 181,
+          "available": 50,
+          "updatedAt": "2026-08-13 12:10:00",
+          "status": "ok"
+        },
+        {
+          "code": "A50",
+          "name": "요트경기장 앞 2구역(대형)",
+          "total": 68,
+          "occupied": 41,
+          "available": 27,
+          "updatedAt": "2026-08-13 12:10:00",
+          "status": "ok"
+        }
+      ]
+    },
+    "gwangalli": {
+      "name": "광안리해수욕장",
+      "status": "ok",
+      "primary": {
+        "code": "A23",
+        "name": "수변공원",
+        "total": 102,
+        "occupied": 26,
+        "available": 76,
+        "updatedAt": "2026-08-13 12:10:00",
+        "status": "ok"
+      },
+      "parkingLots": [
+        {
+          "code": "A23",
+          "name": "수변공원",
+          "total": 102,
+          "occupied": 26,
+          "available": 76,
+          "updatedAt": "2026-08-13 12:10:00",
+          "status": "ok"
+        }
+      ]
+    },
+    "songjeong": {
+      "name": "송정해수욕장",
+      "status": "unavailable",
+      "primary": null,
+      "parkingLots": [],
+      "error": "실시간 주차정보 제공 주차장 미확인"
+    },
+    "songdo": {
+      "name": "송도해수욕장",
+      "status": "unavailable",
+      "primary": null,
+      "parkingLots": [],
+      "error": "실시간 주차정보 제공 주차장 미확인"
+    },
+    "dadaepo": {
+      "name": "다대포해수욕장",
+      "status": "unavailable",
+      "primary": null,
+      "parkingLots": [],
+      "error": "실시간 주차정보 제공 주차장 미확인"
+    },
+    "ilgwang": {
+      "name": "일광해수욕장",
+      "status": "unavailable",
+      "primary": null,
+      "parkingLots": [],
+      "error": "실시간 주차정보 제공 주차장 미확인"
+    },
+    "imrang": {
+      "name": "임랑해수욕장",
+      "status": "unavailable",
+      "primary": null,
+      "parkingLots": [],
+      "error": "실시간 주차정보 제공 주차장 미확인"
+    }
   },
-  "source": { "name": "부산시설공단 공영주차장 실시간 주차현황" }
+  "source": {
+    "name": "부산시설공단 공영주차장 실시간 주차현황"
+  }
 }
